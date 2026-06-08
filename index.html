@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WiCyS RIT Kosovo Student Chapter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #c2cdaf;
+    --purple: #812991;
+    --lime: #b0d248;
+    --gold: #dcc96c;
+    --blue: #69a1c2;
+    --white: #ffffff;
+    --off-white: #f8f9f5;
+    --dark: #1a1a2e;
+    --gray: #6b7280;
+    --light-gray: #f1f3ee;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --nav-h: 72px;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(129,41,145,0.08);
+    --shadow-lg: 0 12px 48px rgba(129,41,145,0.14);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND PATTERN ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(129,41,145,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(105,161,194,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(176,210,72,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Network nodes SVG pattern */
+  .net-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(194,205,175,0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 2rem;
+    transition: box-shadow 0.3s;
+  }
+
+  nav.scrolled { box-shadow: var(--shadow-lg); }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .nav-logo img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+    margin-left: auto;
+  }
+
+  .nav-links a {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+    text-decoration: none;
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--purple);
+    background: rgba(129,41,145,0.08);
+  }
+
+  .nav-cta {
+    background: var(--purple) !important;
+    color: var(--white) !important;
+    border-radius: 8px !important;
+  }
+
+  .nav-cta:hover {
+    background: #6a1f78 !important;
+    color: var(--white) !important;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--dark);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--sage);
+    padding: 1.5rem 2rem;
+    z-index: 999;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--dark);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .mobile-menu a:hover, .mobile-menu a.active {
+    color: var(--purple);
+    background: rgba(129,41,145,0.08);
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; padding-top: var(--nav-h); }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fafbf7 0%, #f0f4ee 40%, #ece9f7 100%);
+  }
+
+  .hero-bg-shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+  }
+
+  .hero-shape-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; right: -100px; }
+  .hero-shape-2 { width: 400px; height: 400px; background: var(--lime); bottom: -100px; left: -50px; }
+  .hero-shape-3 { width: 300px; height: 300px; background: var(--blue); top: 50%; left: 40%; transform: translate(-50%, -50%); }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-text { }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(129,41,145,0.1);
+    color: var(--purple);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(129,41,145,0.2);
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 .accent { color: var(--purple); }
+  .hero h1 .accent-lime { color: #7fa832; }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.875rem 2rem;
+    background: var(--purple);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px rgba(129,41,145,0.3);
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(129,41,145,0.4);
+    background: #6a1f78;
+  }
+
+  .btn-secondary {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.875rem 2rem;
+    background: transparent;
+    color: var(--purple);
+    border: 2px solid var(--purple);
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-secondary:hover {
+    background: var(--purple);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .btn-lime {
+    background: var(--lime);
+    color: var(--dark);
+    box-shadow: 0 4px 16px rgba(176,210,72,0.3);
+  }
+
+  .btn-lime:hover {
+    background: #9abf3e;
+    box-shadow: 0 8px 24px rgba(176,210,72,0.4);
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero-logo-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-logo-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid;
+    animation: spin 20s linear infinite;
+  }
+
+  .hero-logo-ring:nth-child(1) {
+    width: 320px; height: 320px;
+    border-color: rgba(129,41,145,0.15);
+    animation-duration: 20s;
+  }
+
+  .hero-logo-ring:nth-child(2) {
+    width: 400px; height: 400px;
+    border-color: rgba(176,210,72,0.15);
+    animation-duration: 30s;
+    animation-direction: reverse;
+  }
+
+  .hero-logo-ring:nth-child(3) {
+    width: 480px; height: 480px;
+    border-color: rgba(105,161,194,0.1);
+    animation-duration: 40s;
+  }
+
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .hero-logo-img {
+    position: relative;
+    z-index: 1;
+    width: 260px;
+    filter: drop-shadow(0 20px 40px rgba(129,41,145,0.2));
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--purple);
+    color: var(--white);
+    padding: 2rem;
+  }
+
+  .stats-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--lime);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 0.3rem;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { position: relative; z-index: 1; }
+
+  .section-pad { padding: 5rem 2rem; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--lime);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-title .hl { color: var(--purple); }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: #4a5568;
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  /* ── CARDS ── */
+  .card-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .card-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid rgba(194,205,175,0.5);
+    padding: 2rem;
+    transition: all 0.3s;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--lime));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(129,41,145,0.2);
+  }
+
+  .card:hover::before { transform: scaleX(1); }
+
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+  }
+
+  .card-icon.purple { background: rgba(129,41,145,0.1); }
+  .card-icon.lime { background: rgba(176,210,72,0.15); }
+  .card-icon.blue { background: rgba(105,161,194,0.15); }
+  .card-icon.gold { background: rgba(220,201,108,0.2); }
+
+  .card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--dark);
+  }
+
+  .card p {
+    font-size: 0.92rem;
+    color: #5a6a7a;
+    line-height: 1.65;
+  }
+
+  /* ── ABOUT SECTION on home ── */
+  .about-home {
+    background: var(--off-white);
+  }
+
+  .about-home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-home-img {
+    position: relative;
+  }
+
+  .about-visual-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-visual-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--purple), var(--blue), var(--lime));
+  }
+
+  .about-visual-card img { width: 180px; margin-bottom: 1.5rem; }
+
+  .about-visual-card .tagline {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--purple);
+  }
+
+  .floating-badge {
+    position: absolute;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    box-shadow: var(--shadow-lg);
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .floating-badge.top-right { top: -16px; right: -16px; color: var(--purple); }
+  .floating-badge.bottom-left { bottom: -16px; left: -16px; color: #7fa832; }
+
+  .about-home-text ul {
+    list-style: none;
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .about-home-text li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: #4a5568;
+  }
+
+  .about-home-text li::before {
+    content: '✦';
+    color: var(--lime);
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+  }
+
+  /* ── EVENT CARDS ── */
+  .event-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid rgba(194,205,175,0.5);
+    overflow: hidden;
+    transition: all 0.3s;
+    box-shadow: var(--shadow);
+  }
+
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .event-card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .event-date-box {
+    background: var(--purple);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  .event-date-box .month {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .event-date-box .day {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--lime);
+  }
+
+  .event-meta { flex: 1; }
+  .event-meta h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.35rem;
+  }
+
+  .event-location {
+    font-size: 0.82rem;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .event-card-body { padding: 0 1.5rem 1.5rem; }
+
+  .event-card-body p {
+    font-size: 0.9rem;
+    color: #5a6a7a;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .event-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    padding: 0.2rem 0.7rem;
+    border-radius: 50px;
+    margin-right: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag-workshop { background: rgba(129,41,145,0.1); color: var(--purple); }
+  .tag-speaker { background: rgba(105,161,194,0.15); color: #3a7a9e; }
+  .tag-network { background: rgba(176,210,72,0.15); color: #6a8c1e; }
+  .tag-competition { background: rgba(220,201,108,0.2); color: #8a6c10; }
+
+  /* ── MEMBERSHIP ── */
+  .pricing-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 2px solid rgba(194,205,175,0.5);
+    padding: 2.5rem;
+    transition: all 0.3s;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--purple);
+    box-shadow: 0 12px 48px rgba(129,41,145,0.2);
+  }
+
+  .pricing-card .badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--purple);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .pricing-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .pricing-card .price {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--purple);
+    line-height: 1;
+    margin: 1rem 0;
+  }
+
+  .pricing-card .price span { font-size: 1rem; opacity: 0.6; }
+
+  .pricing-card ul {
+    list-style: none;
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .pricing-card li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: #4a5568;
+  }
+
+  .pricing-card li .check { color: var(--lime); font-size: 1rem; flex-shrink: 0; }
+
+  /* ── FAQ ── */
+  .faq-item {
+    border-bottom: 1px solid rgba(194,205,175,0.5);
+  }
+
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 1.25rem 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: color 0.2s;
+  }
+
+  .faq-question:hover { color: var(--purple); }
+
+  .faq-icon {
+    font-size: 1.2rem;
+    color: var(--purple);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+
+  .faq-answer.open { max-height: 300px; padding-bottom: 1rem; }
+
+  .faq-answer p {
+    font-size: 0.95rem;
+    color: #5a6a7a;
+    line-height: 1.7;
+  }
+
+  .faq-icon.open { transform: rotate(45deg); }
+
+  /* ── CONTACT ── */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 0.875rem 1.1rem;
+    border: 1.5px solid rgba(194,205,175,0.6);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--dark);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(129,41,145,0.1);
+  }
+
+  .form-group textarea { resize: vertical; min-height: 130px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+  /* ── CONTACT INFO CARD ── */
+  .contact-info-card {
+    background: linear-gradient(135deg, var(--purple), #5a1a6d);
+    border-radius: 20px;
+    padding: 2.5rem;
+    color: var(--white);
+    height: fit-content;
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+
+  .contact-info-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-item-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .contact-item-text .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.2rem;
+  }
+
+  .contact-item-text .value {
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.5rem 0.875rem;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: background 0.2s;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .social-btn:hover { background: rgba(255,255,255,0.25); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    background: linear-gradient(135deg, #f8f9f5, #ece9f7);
+    padding: 4rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: var(--purple);
+    opacity: 0.05;
+    right: -150px;
+    top: -150px;
+  }
+
+  .page-hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-hero h1 .hl { color: var(--purple); }
+
+  .page-hero p {
+    font-size: 1.05rem;
+    color: #5a6a7a;
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  /* ── IMPACT SECTION ── */
+  .impact-strip {
+    background: linear-gradient(135deg, var(--dark), #2d1b69);
+    padding: 4rem 2rem;
+    color: var(--white);
+  }
+
+  .impact-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 3rem;
+    text-align: center;
+  }
+
+  .impact-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--lime);
+    line-height: 1;
+  }
+
+  .impact-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--purple), var(--lime));
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 4px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--purple);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 3px rgba(129,41,145,0.3);
+  }
+
+  .timeline-year {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.9rem;
+    color: #5a6a7a;
+    line-height: 1.6;
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--lime));
+  }
+
+  .step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-num {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 16px rgba(129,41,145,0.3);
+  }
+
+  .step h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step p { font-size: 0.85rem; color: #5a6a7a; }
+
+  /* ── PHOTO GRID ── */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .photo-placeholder {
+    border-radius: 12px;
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .photo-placeholder:hover { transform: scale(1.02); }
+
+  .photo-placeholder .emoji { font-size: 2rem; }
+
+  .pp-1 { background: linear-gradient(135deg, rgba(129,41,145,0.12), rgba(129,41,145,0.06)); color: var(--purple); }
+  .pp-2 { background: linear-gradient(135deg, rgba(176,210,72,0.15), rgba(176,210,72,0.07)); color: #6a8c1e; }
+  .pp-3 { background: linear-gradient(135deg, rgba(105,161,194,0.15), rgba(105,161,194,0.07)); color: #3a7a9e; }
+  .pp-4 { background: linear-gradient(135deg, rgba(220,201,108,0.2), rgba(220,201,108,0.08)); color: #8a6c10; }
+  .pp-5 { background: linear-gradient(135deg, rgba(129,41,145,0.08), rgba(105,161,194,0.1)); color: var(--purple); }
+  .pp-6 { background: linear-gradient(135deg, rgba(176,210,72,0.1), rgba(220,201,108,0.1)); color: #6a8c1e; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.75);
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-brand img { height: 56px; margin-bottom: 1rem; filter: brightness(0) invert(1); opacity: 0.9; }
+
+  .footer-brand p { font-size: 0.88rem; line-height: 1.65; max-width: 280px; margin-bottom: 1.5rem; }
+
+  .footer-social { display: flex; gap: 0.6rem; }
+
+  .footer-social a {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+
+  .footer-social a:hover { background: var(--purple); }
+
+  .footer-col h4 {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .footer-col li a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-col li a:hover { color: var(--lime); }
+
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-bottom p { font-size: 0.82rem; opacity: 0.55; }
+
+  .footer-affil {
+    font-size: 0.8rem;
+    opacity: 0.55;
+    text-align: right;
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(129,41,145,0.06), rgba(105,161,194,0.08));
+    border: 1px solid rgba(129,41,145,0.15);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  .highlight-box h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--purple);
+  }
+
+  /* ── MISSION BAND ── */
+  .mission-band {
+    background: linear-gradient(135deg, #f0ebf7, #e8f4ea);
+    border-left: 4px solid var(--purple);
+    border-radius: 0 16px 16px 0;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+  }
+
+  .mission-band p {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── BANNER CTA ── */
+  .cta-banner {
+    background: linear-gradient(135deg, var(--purple), #5a1a6d);
+    color: var(--white);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    right: -100px; top: -150px;
+  }
+
+  .cta-banner::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(176,210,72,0.1);
+    left: -80px; bottom: -100px;
+  }
+
+  .cta-banner-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+
+  .cta-banner h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .cta-banner p { opacity: 0.85; font-size: 1rem; margin-bottom: 2rem; line-height: 1.6; }
+
+  .btn-white {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.875rem 2rem;
+    background: var(--white);
+    color: var(--purple);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .btn-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-content { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+    .hero-text { order: 2; }
+    .hero-visual { order: 1; }
+    .hero p { max-width: 100%; }
+    .hero-btns { justify-content: center; }
+    .about-home-grid { grid-template-columns: 1fr; }
+    .about-home-img { order: -1; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .steps::before { display: none; }
+    .impact-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  @media (max-width: 600px) {
+    .card-grid-3, .card-grid-2 { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .photo-grid { grid-template-columns: 1fr; }
+    .hero-logo-img { width: 180px; }
+    .hero-logo-ring:nth-child(1) { width: 220px; height: 220px; }
+    .hero-logo-ring:nth-child(2) { width: 280px; height: 280px; }
+    .hero-logo-ring:nth-child(3) { width: 340px; height: 340px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── UTILITY ── */
+  .mt-1 { margin-top: 1rem; }
+  .mt-2 { margin-top: 2rem; }
+  .mt-3 { margin-top: 3rem; }
+  .mb-1 { margin-bottom: 1rem; }
+  .mb-2 { margin-bottom: 2rem; }
+  .mb-3 { margin-bottom: 3rem; }
+  .text-center { text-align: center; }
+  .text-purple { color: var(--purple); }
+  .text-lime { color: #7fa832; }
+  .divider { border: none; border-top: 1px solid rgba(194,205,175,0.4); margin: 3rem 0; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    background: rgba(129,41,145,0.1);
+    color: var(--purple);
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .chip.lime { background: rgba(176,210,72,0.15); color: #6a8c1e; }
+  .chip.blue { background: rgba(105,161,194,0.15); color: #3a7a9e; }
+  .chip.gold { background: rgba(220,201,108,0.2); color: #8a6c10; }
+</style>
+</head>
+<body>
+
+<!-- Network background SVG -->
+<svg class="net-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="rgba(129,41,145,0.08)" stroke-width="1">
+    <line x1="100" y1="200" x2="300" y2="150"/><line x1="300" y1="150" x2="500" y2="300"/>
+    <line x1="500" y1="300" x2="700" y2="200"/><line x1="700" y1="200" x2="900" y2="350"/>
+    <line x1="900" y1="350" x2="1100" y2="250"/><line x1="1100" y1="250" x2="1300" y2="400"/>
+    <line x1="200" y1="500" x2="400" y2="450"/><line x1="400" y1="450" x2="600" y2="600"/>
+    <line x1="600" y1="600" x2="800" y2="500"/><line x1="800" y1="500" x2="1000" y2="650"/>
+    <line x1="1000" y1="650" x2="1200" y2="550"/><line x1="300" y1="150" x2="400" y2="450"/>
+    <line x1="700" y1="200" x2="800" y2="500"/><line x1="1100" y1="250" x2="1200" y2="550"/>
+    <line x1="100" y1="700" x2="400" y2="750"/><line x1="400" y1="750" x2="700" y2="800"/>
+    <line x1="700" y1="800" x2="1000" y2="750"/><line x1="1000" y1="750" x2="1350" y2="800"/>
+  </g>
+  <g fill="rgba(176,210,72,0.2)">
+    <circle cx="100" cy="200" r="3"/><circle cx="300" cy="150" r="4"/><circle cx="500" cy="300" r="3"/>
+    <circle cx="700" cy="200" r="5"/><circle cx="900" cy="350" r="3"/><circle cx="1100" cy="250" r="4"/>
+    <circle cx="1300" cy="400" r="3"/><circle cx="200" cy="500" r="3"/><circle cx="400" cy="450" r="4"/>
+    <circle cx="600" cy="600" r="3"/><circle cx="800" cy="500" r="5"/><circle cx="1000" cy="650" r="3"/>
+    <circle cx="1200" cy="550" r="4"/><circle cx="400" cy="750" r="3"/><circle cx="700" cy="800" r="3"/>
+    <circle cx="1000" cy="750" r="4"/><circle cx="1350" cy="800" r="3"/>
+  </g>
+</svg>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <img src="WhatsApp_Image_2026-06-08_at_16_56_05.jpeg" alt="WiCyS RIT Kosovo Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <div style="display:none; flex-direction:column;">
+      <span style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;color:var(--purple);">WiCyS</span>
+      <span style="font-family:var(--font-display);font-size:0.65rem;font-weight:600;color:var(--gray);">RIT KOSOVO</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" data-page="home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('events')" data-page="events">Events</a></li>
+    <li><a href="#" onclick="showPage('about-wicys')" data-page="about-wicys">About WiCyS</a></li>
+    <li><a href="#" onclick="showPage('about-chapter')" data-page="about-chapter">Our Chapter</a></li>
+    <li><a href="#" onclick="showPage('membership')" data-page="membership">Membership</a></li>
+    <li><a href="#" onclick="showPage('contact')" data-page="contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home'); toggleMenu()" data-page="home">Home</a>
+  <a href="#" onclick="showPage('events'); toggleMenu()" data-page="events">Events</a>
+  <a href="#" onclick="showPage('about-wicys'); toggleMenu()" data-page="about-wicys">About WiCyS</a>
+  <a href="#" onclick="showPage('about-chapter'); toggleMenu()" data-page="about-chapter">Our Chapter</a>
+  <a href="#" onclick="showPage('membership'); toggleMenu()" data-page="membership">Membership</a>
+  <a href="#" onclick="showPage('contact'); toggleMenu()" data-page="contact">Contact</a>
+</div>
+
+<!-- ═══════════════════ HOME PAGE ═══════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-shapes">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="hero-shape hero-shape-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">RIT Kosovo Student Chapter</div>
+        <h1>Empowering the <span class="accent">Next Generation</span> of Women in <span class="accent-lime">Cybersecurity</span></h1>
+        <p>We connect, support, and inspire women pursuing careers in cybersecurity — building a community of future leaders right here at RIT Kosovo.</p>
+        <div class="hero-btns">
+          <a href="#" onclick="showPage('membership')" class="btn-primary">✦ Join Us</a>
+          <a href="#" onclick="showPage('events')" class="btn-secondary">View Events →</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-logo-wrap">
+          <div class="hero-logo-ring"></div>
+          <div class="hero-logo-ring"></div>
+          <div class="hero-logo-ring"></div>
+          <img class="hero-logo-img" src="logo.jpeg" alt="WiCyS Logo" onerror="this.style.background='linear-gradient(135deg,rgba(129,41,145,0.1),rgba(176,210,72,0.1))';this.style.borderRadius='16px';this.style.padding='2rem';this.alt='WiCyS RIT Kosovo'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div><div class="stat-num">50+</div><div class="stat-label">Active Members</div></div>
+      <div><div class="stat-num">20+</div><div class="stat-label">Events Per Year</div></div>
+      <div><div class="stat-num">10+</div><div class="stat-label">Industry Partners</div></div>
+      <div><div class="stat-num">3+</div><div class="stat-label">Years Strong</div></div>
+    </div>
+  </div>
+
+  <!-- ABOUT THE CHAPTER -->
+  <section class="about-home section-pad">
+    <div class="container">
+      <div class="about-home-grid">
+        <div class="about-home-img">
+          <div class="about-visual-card">
+            <img src="WhatsApp_Image_2026-06-08_at_16_56_05.jpeg" alt="WiCyS RIT Kosovo" onerror="this.style.display='none'">
+            <div class="tagline">Women in Cybersecurity</div>
+            <p style="font-size:0.9rem;color:var(--gray);margin-top:0.5rem;">RIT Kosovo Student Chapter</p>
+          </div>
+          <div class="floating-badge top-right">🛡️ Since 2026</div>
+          <div class="floating-badge bottom-left">🌍 Global Network</div>
+        </div>
+        <div class="about-home-text">
+          <div class="section-label">About the Chapter</div>
+          <h2 class="section-title">Building a Stronger <span class="hl">Community</span> in Cybersecurity</h2>
+          <p class="section-desc">The WiCyS RIT Kosovo Student Chapter is a vibrant community dedicated to supporting women in cybersecurity. We host events, workshops, and networking sessions that bridge the gap between academia and industry.</p>
+          <ul>
+            <li>Professional workshops led by industry experts</li>
+            <li>Mentorship connections with cybersecurity professionals</li>
+            <li>Networking events and career development sessions</li>
+            <li>Access to the global WiCyS organization and resources</li>
+            <li>Cybersecurity competitions and CTF challenges</li>
+          </ul>
+          <a href="#" onclick="showPage('about-chapter')" class="btn-primary">Learn More →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPCOMING EVENTS PREVIEW -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Upcoming Events</div>
+        <h2 class="section-title">Don't Miss What's <span class="hl">Coming Up</span></h2>
+      </div>
+      <div class="card-grid-3">
+        <div class="event-card fade-in">
+          <div class="event-card-header">
+            <div class="event-date-box"><div class="month">Jun</div><div class="day">20</div></div>
+            <div class="event-meta">
+              <h3>Cybersecurity Careers Panel</h3>
+              <div class="event-location">📍 RIT Kosovo Campus, Auditorium</div>
+            </div>
+          </div>
+          <div class="event-card-body">
+            <span class="event-tag tag-speaker">Guest Speaker</span>
+            <p>Industry leaders discuss career pathways in cybersecurity. Open to all students — networking opportunity included.</p>
+            <a href="#" onclick="showPage('events')" class="btn-primary" style="font-size:0.82rem;padding:0.6rem 1.2rem;">Register →</a>
+          </div>
+        </div>
+        <div class="event-card fade-in" style="transition-delay:0.1s">
+          <div class="event-card-header">
+            <div class="event-date-box" style="background:var(--blue)"><div class="month">Jul</div><div class="day">08</div></div>
+            <div class="event-meta">
+              <h3>Ethical Hacking Workshop</h3>
+              <div class="event-location">📍 CS Lab, RIT Kosovo</div>
+            </div>
+          </div>
+          <div class="event-card-body">
+            <span class="event-tag tag-workshop">Workshop</span>
+            <p>Hands-on introduction to ethical hacking principles, penetration testing basics, and cybersecurity defense strategies.</p>
+            <a href="#" onclick="showPage('events')" class="btn-primary" style="font-size:0.82rem;padding:0.6rem 1.2rem;">Register →</a>
+          </div>
+        </div>
+        <div class="event-card fade-in" style="transition-delay:0.2s">
+          <div class="event-card-header">
+            <div class="event-date-box" style="background:var(--lime);color:var(--dark)"><div class="month" style="color:rgba(0,0,0,0.6)">Jul</div><div class="day" style="color:var(--dark)">22</div></div>
+            <div class="event-meta">
+              <h3>CTF Competition Night</h3>
+              <div class="event-location">📍 RIT Kosovo, Online Hybrid</div>
+            </div>
+          </div>
+          <div class="event-card-body">
+            <span class="event-tag tag-competition">Competition</span>
+            <p>Capture The Flag challenge for all skill levels. Win prizes and gain recognition in the cybersecurity community.</p>
+            <a href="#" onclick="showPage('events')" class="btn-primary" style="font-size:0.82rem;padding:0.6rem 1.2rem;">Register →</a>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a href="#" onclick="showPage('events')" class="btn-secondary">View All Events →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIP BENEFITS -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Why Join</div>
+        <h2 class="section-title">Membership <span class="hl">Benefits</span></h2>
+        <p class="section-desc" style="margin:0.75rem auto 0;text-align:center">Joining WiCyS opens doors to opportunities, connections, and resources you won't find anywhere else.</p>
+      </div>
+      <div class="card-grid-3">
+        <div class="card fade-in">
+          <div class="card-icon purple">🌐</div>
+          <h3>Global Network</h3>
+          <p>Connect with thousands of women in cybersecurity worldwide through the WiCyS global community and annual conference.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.1s">
+          <div class="card-icon lime">🎓</div>
+          <h3>Mentorship</h3>
+          <p>Access structured mentorship programs with cybersecurity professionals and alumni making an impact in the industry.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.2s">
+          <div class="card-icon blue">💼</div>
+          <h3>Career Resources</h3>
+          <p>Exclusive job postings, internship opportunities, and career development workshops tailored to cybersecurity roles.</p>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon gold">🏆</div>
+          <h3>Scholarships</h3>
+          <p>Opportunities for WiCyS scholarships, conference travel funding, and awards recognizing academic excellence.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.1s">
+          <div class="card-icon purple">🔐</div>
+          <h3>Skill Building</h3>
+          <p>Hands-on technical workshops, CTF competitions, and training sessions to level up your cybersecurity skills.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.2s">
+          <div class="card-icon lime">🤝</div>
+          <h3>Community</h3>
+          <p>Be part of an inclusive, supportive community that celebrates diversity and empowers the next generation of leaders.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY IMPACT -->
+  <div class="impact-strip">
+    <div class="max-w-container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center;color:rgba(255,255,255,0.6)">Community Impact</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:var(--white);margin-bottom:0.75rem;">Making a <span style="color:var(--lime)">Difference</span></h2>
+      </div>
+      <div class="impact-grid">
+        <div><div class="impact-num">500+</div><div class="impact-label">Hours of training delivered</div></div>
+        <div><div class="impact-num">30+</div><div class="impact-label">Industry speakers hosted</div></div>
+        <div><div class="impact-num">15+</div><div class="impact-label">Students placed in internships</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTO HIGHLIGHTS -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Photo Highlights</div>
+        <h2 class="section-title">Moments from Our <span class="hl">Community</span></h2>
+      </div>
+      <div class="photo-grid">
+        <div class="photo-placeholder pp-1"><div class="emoji">🎤</div>Guest Speaker Series</div>
+        <div class="photo-placeholder pp-2"><div class="emoji">💻</div>Hacking Workshop</div>
+        <div class="photo-placeholder pp-3"><div class="emoji">🤝</div>Networking Night</div>
+        <div class="photo-placeholder pp-4"><div class="emoji">🏆</div>CTF Competition</div>
+        <div class="photo-placeholder pp-5"><div class="emoji">🎓</div>Member Showcase</div>
+        <div class="photo-placeholder pp-6"><div class="emoji">🌍</div>WiCyS Conference Trip</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-banner-inner">
+      <h2>Ready to Join Our Community?</h2>
+      <p>Become part of a growing network of women shaping the future of cybersecurity at RIT Kosovo and beyond.</p>
+      <a href="#" onclick="showPage('membership')" class="btn-white">Become a Member →</a>
+    </div>
+  </div>
+
+</div><!-- end home -->
+
+<!-- ═══════════════════ EVENTS PAGE ═══════════════════ -->
+<div id="page-events" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-label">Events</div>
+      <h1>Our <span class="hl">Events</span> & Programs</h1>
+      <p>From hands-on workshops to inspiring speaker series — we host events year-round to grow your skills and expand your network.</p>
+    </div>
+  </div>
+
+  <!-- UPCOMING -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="section-label">Upcoming</div>
+      <h2 class="section-title mb-3">Upcoming <span class="hl">Events</span></h2>
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <div class="event-card" style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;padding:1.75rem;align-items:center;border-radius:var(--radius);">
+          <div class="event-date-box"><div class="month">Jun</div><div class="day">20</div></div>
+          <div>
+            <div style="margin-bottom:0.35rem"><span class="event-tag tag-speaker">Guest Speaker</span></div>
+            <h3 style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:0.25rem;">Cybersecurity Careers Panel</h3>
+            <div class="event-location" style="margin-bottom:0.5rem">📍 RIT Kosovo Campus, Auditorium · 4:00 PM – 6:00 PM</div>
+            <p style="font-size:0.9rem;color:#5a6a7a;">Industry professionals share their career journeys and insights. Q&A session + networking reception to follow.</p>
+          </div>
+          <a href="#" class="btn-primary" style="white-space:nowrap;">Register →</a>
+        </div>
+        <div class="event-card" style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;padding:1.75rem;align-items:center;border-radius:var(--radius);">
+          <div class="event-date-box" style="background:var(--blue)"><div class="month">Jul</div><div class="day">08</div></div>
+          <div>
+            <div style="margin-bottom:0.35rem"><span class="event-tag tag-workshop">Workshop</span></div>
+            <h3 style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:0.25rem;">Ethical Hacking & Penetration Testing</h3>
+            <div class="event-location" style="margin-bottom:0.5rem">📍 CS Lab, RIT Kosovo · 2:00 PM – 5:00 PM</div>
+            <p style="font-size:0.9rem;color:#5a6a7a;">A practical, beginner-friendly introduction to ethical hacking. Bring your laptop. All skill levels welcome.</p>
+          </div>
+          <a href="#" class="btn-primary" style="white-space:nowrap;">Register →</a>
+        </div>
+        <div class="event-card" style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;padding:1.75rem;align-items:center;border-radius:var(--radius);">
+          <div class="event-date-box" style="background:var(--lime);color:var(--dark)"><div class="month" style="color:rgba(0,0,0,0.6)">Jul</div><div class="day" style="color:var(--dark)">22</div></div>
+          <div>
+            <div style="margin-bottom:0.35rem"><span class="event-tag tag-competition">Competition</span></div>
+            <h3 style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:0.25rem;">Capture The Flag (CTF) Night</h3>
+            <div class="event-location" style="margin-bottom:0.5rem">📍 RIT Kosovo + Online Hybrid · 6:00 PM – 10:00 PM</div>
+            <p style="font-size:0.9rem;color:#5a6a7a;">Team-based cybersecurity competition with challenges across web security, cryptography, forensics, and more. Prizes awarded!</p>
+          </div>
+          <a href="#" class="btn-primary" style="white-space:nowrap;">Register →</a>
+        </div>
+        <div class="event-card" style="display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;padding:1.75rem;align-items:center;border-radius:var(--radius);">
+          <div class="event-date-box" style="background:#5a3a8c"><div class="month">Aug</div><div class="day">15</div></div>
+          <div>
+            <div style="margin-bottom:0.35rem"><span class="event-tag tag-network">Networking</span></div>
+            <h3 style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:0.25rem;">Back-to-Campus Networking Mixer</h3>
+            <div class="event-location" style="margin-bottom:0.5rem">📍 RIT Kosovo Student Lounge · 5:00 PM – 8:00 PM</div>
+            <p style="font-size:0.9rem;color:#5a6a7a;">Kick off the new semester with fellow members, faculty, and alumni. Meet new faces and reconnect with the community.</p>
+          </div>
+          <a href="#" class="btn-primary" style="white-space:nowrap;">Register →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT TYPES -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">What We Offer</div>
+        <h2 class="section-title">Types of <span class="hl">Programs</span></h2>
+      </div>
+      <div class="card-grid-2">
+        <div class="card">
+          <div class="card-icon purple">🔬</div>
+          <h3>Technical Workshops</h3>
+          <p>Deep-dive sessions covering network security, cryptography, incident response, malware analysis, and ethical hacking. Led by certified professionals and faculty.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">🎙️</div>
+          <h3>Guest Speaker Series</h3>
+          <p>Monthly talks by cybersecurity professionals from top companies and government agencies sharing their experiences, career insights, and industry knowledge.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon lime">🤝</div>
+          <h3>Networking Events</h3>
+          <p>Casual and structured networking events connecting students with alumni, industry professionals, and fellow members. Build your professional circle.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon gold">🏅</div>
+          <h3>Cybersecurity Competitions</h3>
+          <p>CTF competitions, hackathons, and cybersecurity challenges where you can test your skills, learn from peers, and win recognition.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAST EVENTS -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="section-label">Archive</div>
+      <h2 class="section-title mb-3">Past <span class="hl">Events</span></h2>
+      <div class="photo-grid">
+        <div class="photo-placeholder pp-1"><div class="emoji">🔐</div>Cryptography 101 Workshop — March 2026</div>
+        <div class="photo-placeholder pp-2"><div class="emoji">💬</div>Women in Tech Panel — Feb 2026</div>
+        <div class="photo-placeholder pp-3"><div class="emoji">🌐</div>Network Defense Seminar — Jan 2026</div>
+        <div class="photo-placeholder pp-4"><div class="emoji">🎉</div>End-of-Year Celebration — Dec 2025</div>
+        <div class="photo-placeholder pp-5"><div class="emoji">🧩</div>Fall CTF Competition — Nov 2025</div>
+        <div class="photo-placeholder pp-6"><div class="emoji">🏢</div>Industry Tour — Oct 2025</div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end events -->
+
+<!-- ═══════════════════ ABOUT WICYS PAGE ═══════════════════ -->
+<div id="page-about-wicys" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-label">About WiCyS</div>
+      <h1>What is <span class="hl">WiCyS</span>?</h1>
+      <p>Women in CyberSecurity (WiCyS) is a nonprofit organization dedicated to the recruitment, retention, and advancement of women in cybersecurity.</p>
+    </div>
+  </div>
+
+  <section class="section-pad">
+    <div class="container">
+      <div class="about-home-grid">
+        <div>
+          <div class="section-label">Organization</div>
+          <h2 class="section-title">The Global <span class="hl">WiCyS</span> Organization</h2>
+          <p class="section-desc" style="margin-bottom:1.5rem">WiCyS was founded in 2012 with the goal of bringing together women in cybersecurity from academia, research, and industry. Today, it has grown into a global force for diversity and inclusion in the cybersecurity field.</p>
+          <div class="mission-band">
+            <p>"To bring together women in cybersecurity for recruitment, retention, and advancement in the field."</p>
+          </div>
+          <p class="section-desc">WiCyS serves as a catalyst for change, creating pathways for women to enter, thrive, and lead in cybersecurity careers through conferences, scholarships, training, and a vibrant global community.</p>
+        </div>
+        <div>
+          <div class="highlight-box" style="margin-bottom:1.5rem">
+            <h3>🎯 Mission</h3>
+            <p style="font-size:0.95rem;color:#5a6a7a;line-height:1.7">To recruit, retain, and advance women in cybersecurity — creating a diverse, inclusive, and highly skilled cybersecurity workforce for the future.</p>
+          </div>
+          <div class="highlight-box">
+            <h3>👁️ Vision</h3>
+            <p style="font-size:0.95rem;color:#5a6a7a;line-height:1.7">A world where gender is no barrier to excellence and leadership in cybersecurity — where every woman has the opportunity and support to reach her full potential.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GLOBAL BENEFITS -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Global Benefits</div>
+        <h2 class="section-title">Why the Global <span class="hl">WiCyS Community</span> Matters</h2>
+      </div>
+      <div class="card-grid-3">
+        <div class="card fade-in">
+          <div class="card-icon purple">🌎</div>
+          <h3>Annual Conference</h3>
+          <p>The WiCyS Annual Conference is one of the premier gatherings for women in cybersecurity, featuring keynotes, workshops, and extensive networking.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.1s">
+          <div class="card-icon lime">📚</div>
+          <h3>Scholarships & Awards</h3>
+          <p>WiCyS offers numerous scholarships and awards for students and professionals, helping to fund education and recognize achievement.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.2s">
+          <div class="card-icon blue">🤝</div>
+          <h3>Mentorship Programs</h3>
+          <p>Structured mentorship connecting aspiring cybersecurity professionals with established industry leaders and experienced practitioners.</p>
+        </div>
+        <div class="card fade-in">
+          <div class="card-icon gold">💼</div>
+          <h3>Career Center</h3>
+          <p>Access to an exclusive job board, resume resources, interview preparation, and direct connections to employers committed to diversity.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.1s">
+          <div class="card-icon purple">🏫</div>
+          <h3>Student Chapters</h3>
+          <p>Hundreds of student chapters worldwide bring the WiCyS mission to universities, connecting local students to the global community.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.2s">
+          <div class="card-icon lime">🎯</div>
+          <h3>Training & Certification</h3>
+          <p>Free and discounted access to cybersecurity training, certifications, and professional development resources through WiCyS partners.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER CONNECTION -->
+  <section class="section-pad">
+    <div class="container" style="max-width:800px">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Our Connection</div>
+        <h2 class="section-title">National Organization ↔ <span class="hl">Student Chapter</span></h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:2rem;align-items:center;margin-top:2rem;">
+        <div class="card" style="text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🌐</div>
+          <h3>WiCyS National</h3>
+          <p>Sets the mission, provides resources, runs the annual conference, and connects all chapters worldwide.</p>
+        </div>
+        <div style="text-align:center;color:var(--purple);font-family:var(--font-display);font-weight:800;font-size:1.5rem;white-space:nowrap">⟷</div>
+        <div class="card" style="text-align:center;border-color:var(--purple)">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🏫</div>
+          <h3>RIT Kosovo Chapter</h3>
+          <p>Delivers local programming, builds community on campus, and connects students to the global network.</p>
+        </div>
+      </div>
+      <div class="highlight-box mt-3">
+        <h3>📋 Key Benefits of the Connection</h3>
+        <ul style="list-style:none;margin-top:0.75rem;display:flex;flex-direction:column;gap:0.5rem;">
+          <li style="display:flex;gap:0.75rem;font-size:0.92rem;color:#5a6a7a"><span style="color:var(--lime)">✦</span> Chapter members gain access to national WiCyS membership benefits</li>
+          <li style="display:flex;gap:0.75rem;font-size:0.92rem;color:#5a6a7a"><span style="color:var(--lime)">✦</span> Direct access to WiCyS annual conference discounts and scholarships</li>
+          <li style="display:flex;gap:0.75rem;font-size:0.92rem;color:#5a6a7a"><span style="color:var(--lime)">✦</span> Shared resources, curriculum, and event frameworks from the national org</li>
+          <li style="display:flex;gap:0.75rem;font-size:0.92rem;color:#5a6a7a"><span style="color:var(--lime)">✦</span> Networking with students from hundreds of chapters worldwide</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end about-wicys -->
+
+<!-- ═══════════════════ ABOUT CHAPTER PAGE ═══════════════════ -->
+<div id="page-about-chapter" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-label">About Our Chapter</div>
+      <h1>WiCyS <span class="hl">RIT Kosovo</span> Chapter</h1>
+      <p>Learn about our history, mission, and the passionate community we've built at RIT Kosovo.</p>
+    </div>
+  </div>
+
+  <!-- CHAPTER MISSION -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="about-home-grid">
+        <div>
+          <div class="section-label">Our Mission</div>
+          <h2 class="section-title">Championing Women in <span class="hl">Cybersecurity</span> at RIT Kosovo</h2>
+          <div class="mission-band">
+            <p>"To create an inclusive, empowering, and professionally enriching environment for women pursuing cybersecurity at RIT Kosovo and beyond."</p>
+          </div>
+          <p class="section-desc">We believe that diversity in cybersecurity is not just a moral imperative — it is a strategic necessity. Our chapter works tirelessly to ensure that every student, regardless of background, has the opportunity to excel in this critical field.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="card" style="display:flex;gap:1rem;align-items:flex-start;padding:1.5rem">
+            <div style="font-size:1.5rem">🎯</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.3rem">Our Goals</strong><p style="font-size:0.9rem;color:#5a6a7a">Build technical skills, foster professional connections, and inspire confidence in the next generation of women cybersecurity leaders.</p></div>
+          </div>
+          <div class="card" style="display:flex;gap:1rem;align-items:flex-start;padding:1.5rem">
+            <div style="font-size:1.5rem">🌱</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.3rem">Our Values</strong><p style="font-size:0.9rem;color:#5a6a7a">Inclusivity, collaboration, excellence, and a commitment to making cybersecurity accessible to all who are passionate about it.</p></div>
+          </div>
+          <div class="card" style="display:flex;gap:1rem;align-items:flex-start;padding:1.5rem">
+            <div style="font-size:1.5rem">🔭</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.3rem">Our Vision</strong><p style="font-size:0.9rem;color:#5a6a7a">A thriving, diverse community where every woman in cybersecurity at RIT Kosovo feels supported, challenged, and empowered.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY TIMELINE -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container" style="max-width:700px">
+      <div class="section-label">Our Story</div>
+      <h2 class="section-title mb-3">Our <span class="hl">Founding Story</span></h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2026 — Founded</div>
+          <div class="timeline-title">The Chapter is Born</div>
+          <p class="timeline-desc">A small group of passionate students at RIT Kosovo recognized the need for a dedicated community supporting women in cybersecurity on campus. With the backing of faculty and the national WiCyS organization, our chapter was officially founded.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--blue)"></div>
+          <div class="timeline-year">2023 — Growth</div>
+          <div class="timeline-title">First Major Events & Partnerships</div>
+          <p class="timeline-desc">Membership doubled in our second year. We hosted our first guest speaker series and formed partnerships with local tech companies and cybersecurity firms, creating real career pathways for our members.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--lime)"></div>
+          <div class="timeline-year">2024 — Expansion</div>
+          <div class="timeline-title">National Recognition & Competitions</div>
+          <p class="timeline-desc">Our team represented RIT Kosovo at the WiCyS National Conference. Members began competing in national CTF competitions, and our chapter received recognition for community engagement from the university.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--gold)"></div>
+          <div class="timeline-year">2025–2026 — Today</div>
+          <div class="timeline-title">A Thriving Community</div>
+          <p class="timeline-desc">With over 50 active members, a robust events calendar, and industry connections across the region, our chapter continues to grow and make a lasting impact at RIT Kosovo and in the wider Balkan tech ecosystem.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY ENGAGEMENT -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Engagement</div>
+        <h2 class="section-title">Community <span class="hl">Initiatives</span></h2>
+      </div>
+      <div class="card-grid-3">
+        <div class="card">
+          <div class="card-icon purple">🏫</div>
+          <h3>Outreach to High Schools</h3>
+          <p>We visit local high schools to introduce young women to cybersecurity careers and inspire the next generation to pursue STEM fields.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon lime">💡</div>
+          <h3>Cybersecurity Awareness</h3>
+          <p>Monthly campaigns to raise digital literacy and cybersecurity awareness across the RIT Kosovo campus and local community.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">🌐</div>
+          <h3>Regional Tech Partnerships</h3>
+          <p>Collaborating with Kosovo's growing tech ecosystem, connecting members to local startups, NGOs, and cybersecurity organizations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY GET INVOLVED -->
+  <div class="cta-banner">
+    <div class="cta-banner-inner">
+      <h2>Why Should You Get Involved?</h2>
+      <p>Being part of WiCyS RIT Kosovo means joining a community that invests in your growth, advocates for your success, and connects you to a world of opportunities.</p>
+      <a href="#" onclick="showPage('membership')" class="btn-white">Join the Chapter →</a>
+    </div>
+  </div>
+
+</div><!-- end about-chapter -->
+
+<!-- ═══════════════════ MEMBERSHIP PAGE ═══════════════════ -->
+<div id="page-membership" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-label">Membership</div>
+      <h1>Join <span class="hl">WiCyS</span> RIT Kosovo</h1>
+      <p>Become a member and unlock access to a global network, career resources, and a community that has your back every step of the way.</p>
+    </div>
+  </div>
+
+  <!-- WHY JOIN -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Why Join</div>
+        <h2 class="section-title">Your Membership, <span class="hl">Your Future</span></h2>
+      </div>
+      <div class="card-grid-3">
+        <div class="card fade-in">
+          <div class="card-icon purple">🌐</div>
+          <h3>Global Network Access</h3>
+          <p>Connect with WiCyS members from around the world — professionals, researchers, academics, and students who share your passion.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.1s">
+          <div class="card-icon lime">🎓</div>
+          <h3>Learning Opportunities</h3>
+          <p>Attend exclusive workshops, webinars, and training sessions. Stay current with the latest trends, tools, and techniques in cybersecurity.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay:0.2s">
+          <div class="card-icon gold">🏆</div>
+          <h3>Scholarships & Awards</h3>
+          <p>Access to WiCyS scholarships, travel awards for the annual conference, and chapter recognition programs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIP TYPES -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Membership Options</div>
+        <h2 class="section-title">Two Ways to <span class="hl">Belong</span></h2>
+        <p class="section-desc" style="text-align:center;margin:0.75rem auto 0">Understand the difference between local chapter membership and the full WiCyS organizational membership.</p>
+      </div>
+      <div class="card-grid-2">
+        <div class="pricing-card">
+          <h3>🏫 Local Chapter Membership</h3>
+          <div class="price">Free <span>/ semester</span></div>
+          <p style="font-size:0.9rem;color:#5a6a7a;margin-bottom:0">Membership in the WiCyS RIT Kosovo Student Chapter — the best way to get involved locally.</p>
+          <ul>
+            <li><span class="check">✦</span> Attend all chapter events and workshops</li>
+            <li><span class="check">✦</span> Access to chapter resources and materials</li>
+            <li><span class="check">✦</span> Mentorship connections on campus</li>
+            <li><span class="check">✦</span> Networking with local professionals</li>
+            <li><span class="check">✦</span> Chapter Slack and mailing list</li>
+            <li><span class="check">✦</span> Voting rights in chapter decisions</li>
+          </ul>
+          <a href="#" onclick="showPage('contact')" class="btn-secondary" style="width:100%;justify-content:center">Join the Chapter →</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="badge">Recommended for All Members</div>
+          <h3 style="color:var(--purple)">🌐 WiCyS Organizational Membership</h3>
+          <div class="price">$20 <span>/ year (students)</span></div>
+          <p style="font-size:0.9rem;color:#5a6a7a;margin-bottom:0">Full membership with the national WiCyS organization — unlocks the full global community.</p>
+          <ul>
+            <li><span class="check">✦</span> Everything in Local Chapter Membership</li>
+            <li><span class="check">✦</span> Access to WiCyS Annual Conference</li>
+            <li><span class="check">✦</span> National scholarship eligibility</li>
+            <li><span class="check">✦</span> WiCyS job board and career center</li>
+            <li><span class="check">✦</span> National mentorship programs</li>
+            <li><span class="check">✦</span> Access to WiCyS training & certifications</li>
+          </ul>
+          <a href="https://www.wicys.org/membership/" target="_blank" class="btn-primary" style="width:100%;justify-content:center">Join WiCyS National →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELIGIBILITY -->
+  <section class="section-pad">
+    <div class="container" style="max-width:700px">
+      <div class="section-label">Eligibility</div>
+      <h2 class="section-title mb-3">Who Can <span class="hl">Join?</span></h2>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="font-size:1.3rem">👩‍🎓</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.2rem">Students</strong><p style="font-size:0.92rem;color:#5a6a7a">All current RIT Kosovo students interested in cybersecurity are welcome to join, regardless of major or experience level.</p></div>
+          </div>
+          <hr class="divider" style="margin:0.5rem 0">
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="font-size:1.3rem">👩‍💻</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.2rem">All Genders Welcome</strong><p style="font-size:0.92rem;color:#5a6a7a">While WiCyS focuses on supporting women, all students who support the mission of diversity and inclusion in cybersecurity are welcome as allies.</p></div>
+          </div>
+          <hr class="divider" style="margin:0.5rem 0">
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="font-size:1.3rem">🌱</div>
+            <div><strong style="font-family:var(--font-display);display:block;margin-bottom:0.2rem">No Prior Experience Needed</strong><p style="font-size:0.92rem;color:#5a6a7a">Beginners and experts alike are welcome. We learn together and grow together.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO JOIN -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">How to Join</div>
+        <h2 class="section-title">Join in <span class="hl">4 Simple Steps</span></h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Fill the Form</h4>
+          <p>Complete our quick membership interest form via the Contact page or at any of our events.</p>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--blue)">2</div>
+          <h4>Attend an Event</h4>
+          <p>Come to any chapter event to meet the community and learn more about what we do.</p>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--lime);color:var(--dark)">3</div>
+          <h4>Join Our Channels</h4>
+          <p>Get added to our Slack workspace and mailing list to stay updated and connected.</p>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--gold);color:var(--dark)">4</div>
+          <h4>Get Involved!</h4>
+          <p>Participate in workshops, volunteer for events, and consider joining the leadership team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-pad">
+    <div class="container" style="max-width:720px">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title mb-3">Frequently Asked <span class="hl">Questions</span></h2>
+      <div id="faqList">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Do I need to be a cybersecurity major to join?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Not at all! We welcome students from all majors. Whether you're in computer science, engineering, business, or any other field — if you're interested in cybersecurity, there's a place for you here.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Is local chapter membership the same as WiCyS national membership?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>No, they are separate. Local chapter membership is free and gives you access to all RIT Kosovo chapter events and activities. National WiCyS membership ($20/year for students) unlocks the full suite of global resources, conference access, and scholarship eligibility. We encourage members to consider both.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How much time commitment is involved?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>There's no minimum commitment. Attend the events that interest you, volunteer when you can, and stay connected through our channels. We understand that students are busy — we design our programming to be impactful even if you can only join occasionally.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can I join the leadership team?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Absolutely! We hold elections each academic year for leadership positions including President, Vice President, Events Coordinator, and more. Any active member in good standing is eligible to run. Joining leadership is a fantastic way to develop professional skills and make a greater impact.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Can men join or attend events?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Yes! While WiCyS is focused on supporting and empowering women in cybersecurity, allies of all genders are welcome to attend most events, become associate members, and support the mission. We believe everyone has a role to play in creating a more diverse and inclusive cybersecurity field.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Are there opportunities for scholarships or conference funding?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer"><p>Yes! National WiCyS members are eligible to apply for various scholarships and conference attendance grants. Our chapter also advocates for university funding to support members attending the WiCyS Annual Conference. Contact us for the latest opportunities.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end membership -->
+
+<!-- ═══════════════════ CONTACT PAGE ═══════════════════ -->
+<div id="page-contact" class="page">
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="section-label">Contact</div>
+      <h1>Get in <span class="hl">Touch</span></h1>
+      <p>Have a question, want to join, or interested in partnering with us? We'd love to hear from you.</p>
+    </div>
+  </div>
+
+  <section class="section-pad">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 380px;gap:3rem;align-items:start">
+        <div>
+          <div class="section-label">Send a Message</div>
+          <h2 class="section-title mb-3">We're Here to <span class="hl">Help</span></h2>
+          <form class="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fname">First Name *</label>
+                <input type="text" id="fname" placeholder="Your first name" required>
+              </div>
+              <div class="form-group">
+                <label for="lname">Last Name *</label>
+                <input type="text" id="lname" placeholder="Your last name" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" placeholder="your.email@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <select id="subject">
+                <option value="">Select a topic…</option>
+                <option>Membership Inquiry</option>
+                <option>Event Information</option>
+                <option>Partnership / Sponsorship</option>
+                <option>Speaker Request</option>
+                <option>Media Inquiry</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" placeholder="Tell us what's on your mind…" required></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:1rem">Send Message ✦</button>
+            <div id="successMsg" style="display:none;background:rgba(176,210,72,0.15);border:1px solid rgba(176,210,72,0.4);border-radius:10px;padding:1rem;font-family:var(--font-display);font-weight:600;color:#5a7a1e;text-align:center">
+              ✓ Message sent! We'll get back to you within 48 hours.
+            </div>
+          </form>
+        </div>
+        <div>
+          <div class="contact-info-card">
+            <h3>Contact Information</h3>
+            <div class="contact-item">
+              <div class="contact-item-icon">📧</div>
+              <div class="contact-item-text">
+                <div class="label">Email</div>
+                <div class="value">WiCySClub@auk.org</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-text">
+                <div class="label">Location</div>
+                <div class="value">RIT Kosovo, Pristina<br>Republic of Kosovo</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📅</div>
+              <div class="contact-item-text">
+                <div class="label">Regular Meetings</div>
+                <div class="value">Every other Wednesday<br>5:00 PM – 6:30 PM</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🏢</div>
+              <div class="contact-item-text">
+                <div class="label">Meeting Room</div>
+                <div class="value">CS Department Conference Room<br>(check email for updates)</div>
+              </div>
+            </div>
+            <div class="social-links">
+              <a href="#" class="social-btn">in LinkedIn</a>
+              <a href="https://www.instagram.com/wicysritk/" class="social-btn">📸 Instagram</a>
+              <a href="#" class="social-btn">▶ YouTube</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAP / LOCATION -->
+  <section class="section-pad" style="background:var(--off-white)">
+    <div class="container">
+      <div class="text-center mb-3">
+        <div class="section-label" style="justify-content:center">Find Us</div>
+        <h2 class="section-title">Visit RIT <span class="hl">Kosovo</span></h2>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(129,41,145,0.06),rgba(105,161,194,0.08));border:1px solid rgba(129,41,145,0.15);border-radius:20px;padding:3rem;text-align:center">
+        <div style="font-size:3rem;margin-bottom:1rem">📍</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">RIT Kosovo (A.U.K)</h3>
+        <p style="color:#5a6a7a;font-size:0.95rem;margin-bottom:1.5rem">Rr. Pavarësia, Pristina 10000, Kosovo</p>
+        <a href="https://maps.google.com/?q=RIT+Kosovo+Pristina" target="_blank" class="btn-primary">Open in Google Maps →</a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end contact -->
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="WhatsApp_Image_2026-06-08_at_16_56_05.jpeg" alt="WiCyS RIT Kosovo" onerror="this.style.display='none'">
+      <p>WiCyS RIT Kosovo Student Chapter — empowering women in cybersecurity through community, education, and professional development.</p>
+      <div class="footer-social">
+        <a href="#" title="LinkedIn">in</a>
+        <a href="https://www.instagram.com/wicysritk/" title="Instagram">◎</a>
+        <a href="#" title="YouTube">▶</a>
+        <a href="#" title="Email">✉</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#" onclick="showPage('home')">Home</a></li>
+        <li><a href="#" onclick="showPage('events')">Events</a></li>
+        <li><a href="#" onclick="showPage('about-wicys')">About WiCyS</a></li>
+        <li><a href="#" onclick="showPage('about-chapter')">Our Chapter</a></li>
+        <li><a href="#" onclick="showPage('membership')">Membership</a></li>
+        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://www.wicys.org" target="_blank">WiCyS National</a></li>
+        <li><a href="#" onclick="showPage('membership')">Join Us</a></li>
+        <li><a href="#" onclick="showPage('events')">Event Calendar</a></li>
+        <li><a href="https://www.ritkosovo.edu" target="_blank">RIT Kosovo</a></li>
+        <li><a href="#" onclick="showPage('contact')">Partner With Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:wicys@rit.edu.kv">wicys@rit.edu.kv</a></li>
+        <li><a href="#">Pristina, Kosovo</a></li>
+        <li><a href="#">Meetings: bi-weekly Wed</a></li>
+        <li><a href="#">5:00 PM – 6:30 PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 WiCyS RIT Kosovo Student Chapter. All rights reserved.</p>
+    <p class="footer-affil">A Student Chapter of Women in CyberSecurity (WiCyS) · wicys.org</p>
+  </div>
+</footer>
+
+<script>
+  // ── PAGE NAVIGATION ──
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show target
+    document.getElementById('page-' + pageId).classList.add('active');
+    // Update nav links
+    document.querySelectorAll('[data-page]').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === pageId);
+    });
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Trigger animations
+    setTimeout(initFadeIn, 100);
+    return false;
+  }
+
+  // ── HAMBURGER ──
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ── NAV SCROLL EFFECT ──
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ── FAQ TOGGLE ──
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('.faq-icon');
+    const isOpen = answer.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('open'));
+    // Open clicked
+    if (!isOpen) {
+      answer.classList.add('open');
+      icon.classList.add('open');
+    }
+  }
+
+  // ── CONTACT FORM ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('successMsg').style.display = 'block';
+    e.target.reset();
+    setTimeout(() => {
+      document.getElementById('successMsg').style.display = 'none';
+    }, 5000);
+  }
+
+  // ── FADE IN OBSERVER ──
+  function initFadeIn() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }
+
+  // Init on load
+  initFadeIn();
+</script>
+
+</body>
+</html>
